@@ -1,14 +1,20 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace demoWindowsService
 {
     class Program
     {
-        static void Main(string[] args)
+        static Task Main(string[] args)
         {
-            var builder = Host.CreateApplicationBuilder(args);
-            builder.Services.AddHostedService<Worker>();
-
-            var host = builder.Build();
-            host.Run();
+            return Host.CreateDefaultBuilder(args)
+                .UseWindowsService() // 設定為 Windows Service
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<Worker>();
+                })
+                .Build()
+                .RunAsync();
         }
     }
 }
