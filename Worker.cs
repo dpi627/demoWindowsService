@@ -9,6 +9,7 @@ public class Worker : BackgroundService
         _logger = logger;
     }
 
+    // ExecuteAsync 是背景服務的主邏輯，會在服務啟動後持續運行
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
