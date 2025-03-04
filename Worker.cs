@@ -1,24 +1,45 @@
 namespace demoWindowsService;
 
-public class Worker : BackgroundService
+public class Worker(
+    ILogger<Worker> logger,
+    IConfiguration config
+    ) : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<Worker> _logger = logger;
 
-    public Worker(ILogger<Worker> logger)
+    // 服務啟動時執行一次
+    public override Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger = logger;
+        _logger.LogInformation("服務正在啟動...");
+        return base.StartAsync(cancellationToken);
     }
 
-    // ExecuteAsync 是背景服務的主邏輯，會在服務啟動後持續運行
+    // 主要的背景執行邏輯
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        int interval = config.GetValue<int>("Worker:Interval");
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            try
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+
+                // 在這裡加入您的業務邏輯
+                // 例如：檔案監控、資料處理等
+
+                await Task.Delay(interval, stoppingToken); // 每5秒執行一次
             }
-            await Task.Delay(1000, stoppingToken);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "執行時發生錯誤");
+            }
         }
+    }
+
+    // 服務停止時執行一次
+    public override Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("服務正在停止...");
+        return base.StopAsync(cancellationToken);
     }
 }
