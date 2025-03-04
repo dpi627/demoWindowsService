@@ -1,4 +1,4 @@
-*![](https://img.shields.io/badge/SGS-OAD-orange) 
+![](https://img.shields.io/badge/SGS-OAD-orange) 
 ![](https://img.shields.io/badge/proj-WindowsService-purple) 
 ![](https://img.shields.io/badge/-9-512BD4?logo=dotnet)
 ![](https://img.shields.io/badge/Git-555?logo=git)
